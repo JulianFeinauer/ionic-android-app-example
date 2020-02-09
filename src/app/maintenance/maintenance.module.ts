@@ -7,8 +7,6 @@ import {IonicModule} from '@ionic/angular';
 import {MaintenancePage} from './maintenance.page';
 import {RouterModule} from '@angular/router';
 import {ToasterModule} from 'angular2-toaster';
-import {MatIconModule} from '@angular/material/icon';
-import {MatBadgeModule} from '@angular/material/badge';
 
 
 @NgModule({
@@ -23,9 +21,7 @@ import {MatBadgeModule} from '@angular/material/badge';
                 path: '',
                 component: MaintenancePage
             }
-        ]),
-        MatIconModule,
-        MatBadgeModule
+        ])
     ],
     declarations: [MaintenancePage]
 })
