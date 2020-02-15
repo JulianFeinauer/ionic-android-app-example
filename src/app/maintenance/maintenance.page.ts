@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ToasterService} from 'angular2-toaster';
 import {NotificationService} from '../notification.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-maintenance',
@@ -11,24 +11,28 @@ import {NotificationService} from '../notification.service';
 export class MaintenancePage implements OnInit {
 
   private todo: FormGroup;
-  private toasterService: ToasterService;
-  private notifications: NotificationService;
 
-  constructor( private formBuilder: FormBuilder, toasterService: ToasterService, notifications: NotificationService) {
+  constructor( private formBuilder: FormBuilder, private toasterService: ToastController, private notifications: NotificationService) {
     this.toasterService = toasterService;
     this.notifications = notifications;
     this.todo = this.formBuilder.group({
       title: ['', Validators.required],
       description: [''],
-    })
+    });
   }
 
   ngOnInit() {
   }
 
-  logForm(value) {
-    this.notifications.send(value)
-    this.toasterService.pop('success', 'Submission Successful', 'Value ' + JSON.stringify(this.todo.value) + ' has been submitted');
+  async logForm(value) {
+    this.notifications.send(value);
+    const toast = await this.toasterService.create({
+      duration: 2000,
+      color: 'success',
+      message: `Value ${JSON.stringify(this.todo.value)} has been submitted`,
+      header: 'Submission Successful'
+    });
+    toast.present();
   }
 
   getNumber() {
@@ -37,8 +41,8 @@ export class MaintenancePage implements OnInit {
 
   toastSomething() {
     const unread = this.notifications.getUnread();
-    for (let any of unread) {
-      this.toasterService.pop('success', 'Unread Message',  `Message is: ${JSON.stringify(any)}`);
+    for (const elem of unread) {
+      this.toasterService.pop('success', 'Unread Message',  `Message is: ${JSON.stringify(elem)}`);
     }
   }
 }
